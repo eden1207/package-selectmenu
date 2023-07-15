@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import './styles/SelectMenu.css'
+import './Styles/SelectMenu.css'
 
 
 /**
