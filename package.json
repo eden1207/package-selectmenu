@@ -1,9 +1,12 @@
 {
   "name": "package-select-menu",
-  "version": "0.1.0",
-  "private": true,
+  "version": "8.0.0",
+  "description": "This is a library to create a list of words",
+  "main": ".build/index.js",
+  "author": "eden1207",
+  "license": "ISC",
+  "private": false,
   "dependencies": {
-    "@babel/polyfill": "^7.12.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -15,7 +18,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "del -rf dist && NODE_ENV=production babel src --out-dir dist --copy-files",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -40,6 +43,7 @@
   "devDependencies": {
     "@babel/cli": "^7.22.9",
     "@babel/core": "^7.22.9",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.22.9"
   }
 }
