@@ -40,20 +40,20 @@ import SelectMenu from 'package-select-menu';
 
 #### SelectMenu props
 
-When you are using the component SelectMenu, there are three props value that you must
-enter:
+When you are using the component SelectMenu, there are five props values available:
 
-| Name          | Description      
-| -----------   | -----------                  
-| options       | arrayOfObjects            
-| SelectMenuID  | string           
-| setData       | function   
+| Name                         | Description      
+| -----------                  | -----------                  
+| options                      | arrayOfObjects
+| setData                      | function             
+| btnListWidthValue (optional) | number        
+| listWidthValue (optional)    | number  
+| isDisableValue (optional)    | boolean 
 
 The first one, is the options, containing the array of objets described on the beginning.
-Then, you must enter the SelectMenuID which is the id of your select menu (example: 'state' or 'departement').
-Finally, the purpose of this list is to click on one element. When you do this, the value abbreviation
+Then, the purpose of this list is to click on one element. When you do this, the value abbreviation
 will be saved in a state. That is why you have to create a hook useState and call the function in the
-props setData. There is down here an example of how you can use the SelectMenu:
+props setData. The props btnListWidthValue and listWidthValue are used optionally to enter the list button width and the list width value. The option isDisableValue is a boolean to make the select menu available (false) or not (true). There is down here an example of how you can use the SelectMenu:
 
 ```jsx
 import React, { useState } from 'react';
@@ -79,7 +79,6 @@ export default function YourComponent() {
         <React.Fragment>
             <SelectMenu 
                 options={fruits}
-                SelectMenuID={"fruit"}
                 setData={setFruit}
             />
         </React.Fragment>
