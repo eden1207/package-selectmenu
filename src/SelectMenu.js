@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 import './Styles/SelectMenu.css';
 
 
 /**
  * Function of the component used to display the Select Menu.
  */
-export default function SelectMenu({ options, SelectMenuID, setData }) {
+export default function SelectMenu({ options, setData, btnListWidthValue, listWidthValue, isDisableValue }) {
+    const isDisable = isDisableValue || false;
+    const SelectMenuID = uuidv4();
     const ids = {
         element: SelectMenuID,    
         button: SelectMenuID + "-button",
@@ -155,7 +158,7 @@ export default function SelectMenu({ options, SelectMenuID, setData }) {
     const uiSelectmenuOpen = isOpen ? " ui-selectmenu-open" : "";
     return (
         <React.Fragment>
-            <select name={SelectMenuID} id={SelectMenuID} style={{display: 'none'}}>
+            <select name="list" id={SelectMenuID} style={{display: 'none'}}>
                 {
                     options.map((option, index) => (
                         <option key={`${option.name}-${index}`} value={option.abbreviation}>
@@ -167,6 +170,9 @@ export default function SelectMenu({ options, SelectMenuID, setData }) {
             <span 
                 id={ids.button}
                 className={"ui-selectmenu-button ui-button ui-widget " + drawButtonClass}
+                style = {{
+                    width: btnListWidthValue || 224
+                }}
                 tabIndex={0} // makes the element focusable (0) or not (-1) for sequential focus navigation
                 role={"combobox"}
                 aria-expanded={isOpen} // Indicate if the menu is open or closed
@@ -176,12 +182,20 @@ export default function SelectMenu({ options, SelectMenuID, setData }) {
                 aria-haspopup={true} // indicates the availability
                 aria-activedescendant={options[indexMenuItemFocused].name.toLowerCase()+ "-" + indexMenuItemFocused} // identifies the currently active element when focus is on a composite
                 aria-labelledby={options[indexMenuItemSelected].name.toLowerCase()+ "-" + indexMenuItemSelected} // identifies the element id selected
-                aria-disabled={false} // state indicates that the element is perceivable but disabled, so it is not editable or otherwise operable
-                onClick={() => {
-                    setIsOpen(!isOpen);
+                aria-disabled={isDisable} // state indicates that the element is perceivable but disabled, so it is not editable or otherwise operable
+                onClick={(e) => {
+                    if(isDisable) {
+                        e.preventDefault();
+                    } else{
+                        setIsOpen(!isOpen);
+                    }
                 }}
                 onKeyDown={(e) => {
-                    detectKeydown(e);
+                    if(isDisable) {
+                        e.preventDefault();
+                    } else{
+                        detectKeydown(e);
+                    }
                 }}
             >
                 <span className='ui-selectmenu-icon ui-icon ui-icon-triangle-1-s'></span>
@@ -191,13 +205,12 @@ export default function SelectMenu({ options, SelectMenuID, setData }) {
             </span>
             <div 
                 className={"ui-selectmenu-menu ui-front" + uiSelectmenuOpen}
-                //style = {listStyle}
             > 
                 <ul 
                     id={ids.menu}
                     className='ui-menu ui-corner-bottom ui-widget ui-widget-content'
                     style = {{
-                        width: 256
+                        width: listWidthValue || 256
                     }}
                     tabIndex={0} // makes the element focusable (0) or not (-1) for sequential focus navigation
                     role='listbox'
@@ -260,6 +273,8 @@ export default function SelectMenu({ options, SelectMenuID, setData }) {
 }
 SelectMenu.propTypes = {
     options: PropTypes.arrayOf(PropTypes.object),
-    SelectMenuID: PropTypes.string,
-    setData: PropTypes.func
+    setData: PropTypes.func,
+    btnListWidthValue: PropTypes.number,
+    listWidthValue: PropTypes.number,
+    isDisable: PropTypes.bool
 }
