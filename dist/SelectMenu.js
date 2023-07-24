@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 import './Styles/SelectMenu.css';
 
 /**
@@ -7,9 +8,13 @@ import './Styles/SelectMenu.css';
  */
 export default function SelectMenu({
   options,
-  SelectMenuID,
-  setData
+  setData,
+  btnListWidthValue,
+  listWidthValue,
+  isDisableValue
 }) {
+  const isDisable = isDisableValue || false;
+  const SelectMenuID = uuidv4();
   const ids = {
     element: SelectMenuID,
     button: SelectMenuID + "-button",
@@ -155,7 +160,7 @@ export default function SelectMenu({
   const drawButtonClass = isOpen ? "ui-selectmenu-button-open ui-corner-top" : "ui-selectmenu-button-closed ui-corner-all";
   const uiSelectmenuOpen = isOpen ? " ui-selectmenu-open" : "";
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("select", {
-    name: SelectMenuID,
+    name: "list",
     id: SelectMenuID,
     style: {
       display: 'none'
@@ -166,6 +171,9 @@ export default function SelectMenu({
   }, option.name))), /*#__PURE__*/React.createElement("span", {
     id: ids.button,
     className: "ui-selectmenu-button ui-button ui-widget " + drawButtonClass,
+    style: {
+      width: btnListWidthValue || 224
+    },
     tabIndex: 0 // makes the element focusable (0) or not (-1) for sequential focus navigation
     ,
     role: "combobox",
@@ -183,13 +191,21 @@ export default function SelectMenu({
     ,
     "aria-labelledby": options[indexMenuItemSelected].name.toLowerCase() + "-" + indexMenuItemSelected // identifies the element id selected
     ,
-    "aria-disabled": false // state indicates that the element is perceivable but disabled, so it is not editable or otherwise operable
+    "aria-disabled": isDisable // state indicates that the element is perceivable but disabled, so it is not editable or otherwise operable
     ,
-    onClick: () => {
-      setIsOpen(!isOpen);
+    onClick: e => {
+      if (isDisable) {
+        e.preventDefault();
+      } else {
+        setIsOpen(!isOpen);
+      }
     },
     onKeyDown: e => {
-      detectKeydown(e);
+      if (isDisable) {
+        e.preventDefault();
+      } else {
+        detectKeydown(e);
+      }
     }
   }, /*#__PURE__*/React.createElement("span", {
     className: "ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"
@@ -197,12 +213,11 @@ export default function SelectMenu({
     className: "ui-selectmenu-text"
   }, options[indexMenuItemSelected].name)), /*#__PURE__*/React.createElement("div", {
     className: "ui-selectmenu-menu ui-front" + uiSelectmenuOpen
-    //style = {listStyle}
   }, /*#__PURE__*/React.createElement("ul", {
     id: ids.menu,
     className: "ui-menu ui-corner-bottom ui-widget ui-widget-content",
     style: {
-      width: 256
+      width: listWidthValue || 256
     },
     tabIndex: 0 // makes the element focusable (0) or not (-1) for sequential focus navigation
     ,
@@ -250,6 +265,8 @@ export default function SelectMenu({
 }
 SelectMenu.propTypes = {
   options: PropTypes.arrayOf(PropTypes.object),
-  SelectMenuID: PropTypes.string,
-  setData: PropTypes.func
+  setData: PropTypes.func,
+  btnListWidthValue: PropTypes.number,
+  listWidthValue: PropTypes.number,
+  isDisable: PropTypes.bool
 };
